@@ -12,7 +12,7 @@ val HeaderNav = FC<Props> { props ->
     nav {
         className = ClassName("header-nav")
         ul {
-            className = ClassName("margin-none padding-none")
+            className = ClassName("flex-row margin-none padding-none")
             li {
                 className = ClassName("header-nav-item")
                 a {

@@ -1,6 +1,5 @@
 package games.studiohummingbird.prison.web
 
-import kotlinx.css.li
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML.button
@@ -18,23 +17,30 @@ val actions = listOf(
 )
 
 external interface GuardMenuProps : Props {
-    var onPray: (message: Message) -> Unit
 }
+
+@OptIn(ExperimentalTime::class)
+data class GuardAction(
+    override val occurredAt: Instant,
+    val action: String
+) : DomainEvent
 
 @OptIn(ExperimentalTime::class)
 val GuardMenu = FC<GuardMenuProps> { props ->
     val clock = use(ClockContext)
+    val appendEvent = use(AppendEventContext)
+
     menu {
         className = ClassName("guard-menu")
         actions.forEach { action ->
             li {
+                key = "guard-menu-$action"
                 button {
                     onClick = { event ->
-                        props.onPray(Message(
+                        appendEvent(GuardAction(
                             clock.now(),
                             action
                         ))
-                        console.log(action)
                     }
                     +action
                 }

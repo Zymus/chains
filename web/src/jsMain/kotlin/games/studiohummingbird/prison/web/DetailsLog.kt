@@ -10,11 +10,18 @@ import react.dom.html.ReactHTML.summary
 import react.dom.html.ReactHTML.time
 import react.use
 import web.cssom.ClassName
+import web.dom.ElementId
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
 val DetailsLog = FC<Props> { props ->
-    val messages = use(MessageContext)
+    val events = use(EventsContext)
+    val messages = events.map {
+        Message(
+            it.occurredAt,
+            it.toString()
+        )
+    }
     val first = messages.firstOrNull()
     val sortedByTime = messages.asReversed()
 
@@ -22,6 +29,7 @@ val DetailsLog = FC<Props> { props ->
         className = ClassName("messages")
         summary {
             output {
+                htmlFor = ElementId("")
                 +(sortedByTime.firstOrNull()?.textContent ?: "")
             }
         }
